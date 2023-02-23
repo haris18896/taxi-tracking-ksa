@@ -1,0 +1,25 @@
+{
+  "name": "vehicle-tracking",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "pregit": "git status",
+    "postgit": "git push",
+    "export": "next export -o build",
+    "git": "git add . && git commit -m",
+    "output": "yarn && yarn build && yarn export"
+  },
+  "dependencies": {
+    "@next/font": "13.1.6",
+    "eslint": "8.34.0",
+    "eslint-config-next": "13.1.6",
+    "next": "13.1.6",
+    "node-sass": "^8.0.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
+  }
+}
