@@ -1,21 +1,14 @@
 const navigation = () => {
   return [
     {
-      title: 'Home',
-      path: '/home',
-      icon: 'mdi:home-outline',
+      title: 'map',
+      path: '/map',
+      icon: 'mdi:map-marker'
     },
     {
-      title: 'Second Page',
-      path: '/second-page',
-      icon: 'mdi:email-outline',
-    },
-    {
-      path: '/acl',
-      action: 'read',
-      subject: 'acl-page',
-      title: 'Access Control',
-      icon: 'mdi:shield-outline',
+      title: 'Trips View',
+      path: '/trip-view',
+      icon: 'bx:trip'
     }
   ]
 }
