@@ -17,6 +17,10 @@ import VerticalNavHeader from './VerticalNavHeader'
 
 // ** Util Import
 import { hexToRGBA } from 'src/@core/utils/hex-to-rgba'
+import { Typography } from '@mui/material'
+
+// ** Hooks
+import { useAuth } from 'src/hooks/useAuth'
 
 const StyledBoxForShadow = styled(Box)(({ theme }) => ({
   top: 60,
@@ -36,6 +40,7 @@ const StyledBoxForShadow = styled(Box)(({ theme }) => ({
 const Navigation = props => {
   // ** Props
   const { hidden, settings, afterNavMenuContent, beforeNavMenuContent, navMenuContent: userNavMenuContent } = props
+  const { logout } = useAuth()
 
   // ** States
   const [navHover, setNavHover] = useState(false)
@@ -144,6 +149,14 @@ const Navigation = props => {
           {afterNavMenuContent && afterVerticalNavMenuContentPosition === 'static' ? afterNavMenuContent(props) : null}
         </ScrollWrapper>
       </Box>
+      <Typography
+        variant='body'
+        onClick={() => logout()}
+        color='error'
+        sx={{ mt: 'auto', mb: 10, px: 2, mx: 2, textAlign: 'center', cursor: 'pointer' }}
+      >
+        Logout
+      </Typography>
       {afterNavMenuContent && afterVerticalNavMenuContentPosition === 'fixed' ? afterNavMenuContent(props) : null}
     </Drawer>
   )

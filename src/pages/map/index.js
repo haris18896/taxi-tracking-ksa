@@ -9,24 +9,27 @@ import 'mapbox-gl/dist/mapbox-gl.css'
 import Grid from '@mui/material/Grid'
 
 const Map = ReactMapboxGl({
-  accessToken: 'pk.eyJ1IjoiaGFyaXN0cmFja2luZyIsImEiOiJjbGVneWQ3anowanJvM3ZsZDdiNTB2aGk2In0.-YLuxE0bmfGbf8x3GH3n7A',
-  center: [24.461461, 46.44189],
-  zoom: [10],
-  style: 'mapbox://styles/mapbox/streets-v11'
+  accessToken: 'pk.eyJ1IjoiaGFyaXN0cmFja2luZyIsImEiOiJjbGVneWQ3anowanJvM3ZsZDdiNTB2aGk2In0.-YLuxE0bmfGbf8x3GH3n7A'
+
+  // center: [24.461461, 46.44189]
+  // zoom: [20]
+  // style: 'mapbox://styles/mapbox/navigation-night-v1'
 })
 
 const Home = () => {
   return (
-    <Grid container spacing={6}>
+    <Grid container>
       <Map
-        style='mapbox://styles/mapbox/streets-v11'
+        style='mapbox://styles/mapbox/dark-v11'
         containerStyle={{
           height: '100vh',
           width: '100vw'
         }}
+        center={[46.685396, 24.624972]}
+        zoom={[12]}
       >
         <Layer type='symbol' id='marker' layout={{ 'icon-image': 'marker-15' }}>
-          <Feature coordinates={[24.461461, 46.44189]} />
+          <Feature coordinates={[46.685396, 24.624972]} />
         </Layer>
       </Map>
     </Grid>
