@@ -3,6 +3,18 @@ import CustomChip from 'src/@core/components/mui/chip'
 export const columns = () => {
   return [
     {
+      name: 'Pick Up',
+      selector: row => row?.pickUp
+    },
+    {
+      name: 'Drop Off',
+      selector: row => row?.dropOff
+    },
+    {
+      name: 'Duration',
+      selector: row => row?.duration
+    },
+    {
       name: 'Driver Name',
       selector: row => row?.driver
     },
@@ -38,6 +50,9 @@ export const columns = () => {
 
 export const rows = [
   {
+    pickUp: 'Garden Town, Lahore',
+    dropOff: 'LUMS, lahore',
+    duration: '1 hour',
     driver: 'John Doe',
     vehicle: 'Toyota',
     trip: 'Trip 1',
@@ -46,6 +61,9 @@ export const rows = [
     cost: '10'
   },
   {
+    pickUp: 'Garden Town, Lahore',
+    dropOff: 'LUMS, lahore',
+    duration: '1 hour',
     driver: 'John Doe',
     vehicle: 'Toyota',
     trip: 'Trip 2',
@@ -54,6 +72,9 @@ export const rows = [
     cost: '10'
   },
   {
+    pickUp: 'Garden Town, Lahore',
+    dropOff: 'LUMS, lahore',
+    duration: '1 hour',
     driver: 'John Doe',
     vehicle: 'Toyota',
     trip: 'Trip 1',
@@ -62,6 +83,9 @@ export const rows = [
     cost: '10'
   },
   {
+    pickUp: 'Garden Town, Lahore',
+    dropOff: 'LUMS, lahore',
+    duration: '1 hour',
     driver: 'John Doe',
     vehicle: 'Toyota',
     trip: 'Trip 2',
@@ -70,6 +94,9 @@ export const rows = [
     cost: '10'
   },
   {
+    pickUp: 'Garden Town, Lahore',
+    dropOff: 'LUMS, lahore',
+    duration: '1 hour',
     driver: 'John Doe',
     vehicle: 'Toyota',
     trip: 'Trip 1',
@@ -78,6 +105,9 @@ export const rows = [
     cost: '10'
   },
   {
+    pickUp: 'Garden Town, Lahore',
+    dropOff: 'LUMS, lahore',
+    duration: '1 hour',
     driver: 'John Doe',
     vehicle: 'Toyota',
     trip: 'Trip 2',
@@ -86,6 +116,9 @@ export const rows = [
     cost: '10'
   },
   {
+    pickUp: 'Garden Town, Lahore',
+    dropOff: 'LUMS, lahore',
+    duration: '1 hour',
     driver: 'John Doe',
     vehicle: 'Toyota',
     trip: 'Trip 1',
@@ -94,6 +127,9 @@ export const rows = [
     cost: '10'
   },
   {
+    pickUp: 'Garden Town, Lahore',
+    dropOff: 'LUMS, lahore',
+    duration: '1 hour',
     driver: 'John Doe',
     vehicle: 'Toyota',
     trip: 'Trip 2',
@@ -102,6 +138,9 @@ export const rows = [
     cost: '10'
   },
   {
+    pickUp: 'Garden Town, Lahore',
+    dropOff: 'LUMS, lahore',
+    duration: '1 hour',
     driver: 'John Doe',
     vehicle: 'Toyota',
     trip: 'Trip 1',
@@ -110,6 +149,9 @@ export const rows = [
     cost: '10'
   },
   {
+    pickUp: 'Garden Town, Lahore',
+    dropOff: 'LUMS, lahore',
+    duration: '1 hour',
     driver: 'John Doe',
     vehicle: 'Toyota',
     trip: 'Trip 2',
