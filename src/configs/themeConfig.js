@@ -6,8 +6,9 @@
  */
 const themeConfig = {
   // ** Layout Configs
+  templateLogo: '/images/logo.png',
   templateName: 'Vehicle Tracking' /* App Name */,
-  layout: 'vertical' /* vertical | horizontal */,
+  layout: 'horizontal' /* vertical | horizontal */,
   mode: 'dark' /* light | dark | semi-dark /*! Note: semi-dark value will only work for Vertical Layout */,
   direction: 'ltr' /* ltr | rtl */,
   skin: 'default' /* default | bordered */,

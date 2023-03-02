@@ -121,7 +121,7 @@ const UserDropdown = props => {
             </Box>
           </Box>
         </Box>
-        <Divider sx={{ mt: '0 !important' }} />
+        {/* <Divider sx={{ mt: '0 !important' }} />
         <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose()}>
           <Box sx={styles}>
             <Icon icon='mdi:account-outline' />
@@ -159,6 +159,7 @@ const UserDropdown = props => {
             FAQ
           </Box>
         </MenuItem>
+         */}
         <Divider />
         <MenuItem
           onClick={handleLogout}

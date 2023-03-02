@@ -135,7 +135,7 @@ const HorizontalLayout = props => {
             </Toolbar>
           </Box>
 
-          {navHidden ? null : (
+          {/* {navHidden ? null : (
             <Box className='layout-horizontal-nav' sx={{ width: '100%', ...horizontalLayoutProps?.navMenu?.sx }}>
               <Toolbar
                 className='horizontal-nav-content-container'
@@ -150,7 +150,7 @@ const HorizontalLayout = props => {
                 )}
               </Toolbar>
             </Box>
-          )}
+          )} */}
         </AppBar>
 
         <ContentWrapper
