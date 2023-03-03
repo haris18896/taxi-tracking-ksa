@@ -33,8 +33,7 @@ const AclGuard = props => {
 
   // User is logged in, build ability for the user based on his role
   if (user && user.driverId && !ability) {
-    const role = 'admin'
-    setAbility(buildAbilityFor(role, aclAbilities.subject))
+    setAbility(buildAbilityFor(user.role, aclAbilities.subject))
   }
 
   // Check the access of current user and render pages
