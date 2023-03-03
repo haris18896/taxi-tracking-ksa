@@ -147,7 +147,7 @@ const LoginPage = () => {
       const base64encoded = buffer.toString('base64')
 
       if (base64encoded) {
-        dispatch(login({ base64encoded, callback: () => router.push('/trip-view') }))
+        dispatch(login({ base64encoded, router }))
       }
     }
   })

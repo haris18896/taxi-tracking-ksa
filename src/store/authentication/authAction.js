@@ -2,15 +2,15 @@ import { createAsyncThunk } from '@reduxjs/toolkit'
 import useJwt from 'src/auth/jwt/useJwt'
 
 // Actions
-export const login = createAsyncThunk('auth/login', async ({ base64encoded, callback }, { rejectWithValue }) => {
+export const login = createAsyncThunk('auth/login', async ({ base64encoded, router }, { rejectWithValue }) => {
   try {
     const res = await useJwt.login(base64encoded)
     const resData = res.data
     const driverId = resData?.data?.driverId
-    console.log('res : ', resData?.data)
 
     if (resData?.data?.driverId) {
       useJwt.setToken(driverId)
+      const returnUrl = router?.query?.returnUrl
 
       const user = {
         role: 'admin',
@@ -31,8 +31,8 @@ export const login = createAsyncThunk('auth/login', async ({ base64encoded, call
         photo: resData?.data?.roleId,
         roleId: resData?.data?.photo,
         zoneIds: resData?.data?.zoneIds,
-        isdefaultrole: resData?.data?.driverId,
-        driverId: resData?.data?.isdefaultrole,
+        isdefaultrole: resData?.data?.isdefaultrole,
+        driverId: resData?.data?.driverId,
         wholeAccess: resData?.data?.wholeAccess,
         companystatus: resData?.data?.companystatus,
         AccountExpiryDate: resData?.data?.AccountExpiryDate,
@@ -43,8 +43,8 @@ export const login = createAsyncThunk('auth/login', async ({ base64encoded, call
       }
 
       useJwt.setUserData(user)
-
-      callback()
+      const redirectURL = returnUrl && returnUrl !== '/trip-view' ? returnUrl : '/trip-view'
+      router.replace(redirectURL)
     }
 
     return resData

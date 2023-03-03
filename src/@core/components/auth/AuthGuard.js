@@ -4,15 +4,12 @@ import { useEffect } from 'react'
 // ** Next Import
 import { useRouter } from 'next/router'
 
-// ** Hooks Import
-import useJwt from 'src/auth/jwt/useJwt'
-
 // ** Store
 import { useSelector } from 'react-redux'
 
 const AuthGuard = props => {
   const { children, fallback } = props
-  const user = useJwt.getUserData()
+  const user = localStorage.getItem('userData')
   const { loginInProgress } = useSelector(state => state.auth)
   const router = useRouter()
   useEffect(
@@ -20,7 +17,7 @@ const AuthGuard = props => {
       if (!router.isReady) {
         return
       }
-      if (user?.driverId === null && !window.localStorage.getItem('userData')) {
+      if (user === null && !user) {
         if (router.asPath !== '/') {
           router.replace({
             pathname: '/login',
