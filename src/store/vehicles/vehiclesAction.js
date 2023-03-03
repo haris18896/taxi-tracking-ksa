@@ -29,9 +29,13 @@ export const getDriverDetailsAction = createAsyncThunk(
 
 export const getVehicleTripsAction = createAsyncThunk(
   'vehicles/getVehicleTrips',
-  async ({ base64encoded }, { rejectWithValue }) => {
+  async ({ base64encoded, callback }, { rejectWithValue }) => {
     try {
       const res = await useJwt.getVehicleTrips(base64encoded)
+
+      console.log('res of trips: ', base64encoded, res)
+
+      callback()
 
       return res?.data
     } catch (err) {

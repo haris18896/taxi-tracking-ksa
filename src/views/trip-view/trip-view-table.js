@@ -10,7 +10,7 @@ import { columns, rows } from './table.data'
 import Spinner from 'src/@core/components/spinner'
 
 // ** pagination
-import ReactPagination from 'src/components/pagination'
+// import ReactPagination from 'src/components/pagination'
 
 createTheme(
   'solarized',
@@ -43,12 +43,13 @@ createTheme(
 )
 
 function TripViewTable({
-  //   rows,
-  page,
-  total,
-  limit,
-  loading,
-  handlePageChange
+  rows,
+  loading
+
+  // page,
+  // total,
+  // limit,
+  // handlePageChange
 }) {
   return (
     <>
@@ -56,14 +57,15 @@ function TripViewTable({
         data={rows}
         pointerOnHover
         theme='solarized'
-        rowsPerPage={limit}
         progressPending={loading}
         progressComponent={<Spinner />}
         columns={columns()}
         sortIcon={<Icon icon='lucide:chevrons-up-down' width='13' height='13' />}
+
+        // rowsPerPage={limit}
       />
 
-      {total > 10 && (
+      {/* {total > 10 && (
         <ReactPagination
           total={total}
           limit={limit}
@@ -71,7 +73,7 @@ function TripViewTable({
           handleLimit={e => handleLimitChange(e)}
           handlePagination={(e, page) => handlePageChange(page)}
         />
-      )}
+      )} */}
     </>
   )
 }
@@ -81,8 +83,8 @@ export default TripViewTable
 TripViewTable.propTypes = {
   loading: PropTypes.bool,
   total: PropTypes.number,
-  page: PropTypes.number.isRequired,
-  limit: PropTypes.number.isRequired,
-  handleLimitChange: PropTypes.func.isRequired,
-  handlePageChange: PropTypes.func.isRequired
+  page: PropTypes.number,
+  limit: PropTypes.number,
+  handleLimitChange: PropTypes.func,
+  handlePageChange: PropTypes.func
 }
