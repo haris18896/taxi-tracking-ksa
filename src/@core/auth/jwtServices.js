@@ -59,23 +59,38 @@ export default class JwtService {
     return axios.post(this.jwtConfig.loginEndpoint, data)
   }
 
-  getDriverDetails(data) {
+  getDriverDetails(base64encoded) {
+    var data = new FormData()
+    data.append('postData', base64encoded)
+
     return axios.post(this.jwtConfig.getDriverDetailsEndpoint, data)
   }
 
-  getVehicles(data) {
+  getVehicles(base64encoded) {
+    var data = new FormData()
+    data.append('postData', base64encoded)
+
     return axios.post(this.jwtConfig.getVehiclesEndpoint, data)
   }
 
-  getVehicleTrips(data) {
+  getVehicleTrips(base64encoded) {
+    var data = new FormData()
+    data.append('postData', base64encoded)
+
     return axios.post(this.jwtConfig.getVehicleTripsEndpoint, data)
   }
 
-  updateTripData(data) {
+  updateTripData(base64encoded) {
+    var data = new FormData()
+    data.append('postData', base64encoded)
+
     return axios.post(this.jwtConfig.updateTripDataEndpoint, data)
   }
 
-  getVehiclesPosition(data) {
+  getVehiclesPosition(base64encoded) {
+    var data = new FormData()
+    data.append('postData', base64encoded)
+
     return axios.post(this.jwtConfig.getVehiclePositionEndpoint, data)
   }
 }
