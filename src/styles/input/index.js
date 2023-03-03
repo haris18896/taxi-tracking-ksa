@@ -1,7 +1,7 @@
 import { makeStyles } from '@mui/styles'
 import { styled } from '@mui/material/styles'
 
-import { Box, TextField, Select, InputLabel, Typography } from '@mui/material'
+import { Box, TextField, Select, InputLabel, Typography, OutlinedInput } from '@mui/material'
 
 export const Title = styled(Typography)(({ theme }) => ({
   fontWeight: 700,
@@ -71,4 +71,98 @@ export const StatsWrapper = styled('div')(({ theme }) => ({
   flexWrap: 'wrap',
   justifyContent: 'space-between',
   width: '-webkit-fill-available'
+}))
+
+export const PasswordField = styled(OutlinedInput)(({ theme }) => ({
+  backgroundColor: 'transparent',
+
+  // border: `2px solid ${theme.palette.primary.contrastText}`,
+  borderRadius: '5rem',
+  '& .MuiOutlinedInput-input': {
+    color: theme.palette.primary.contrastText,
+    fontWeight: 500,
+    padding: '0.25rem 1rem'
+  }
+}))
+
+export const EmailField = styled(TextField)(({ theme }) => ({
+  '& .MuiOutlinedInput-root': {
+    borderRadius: '5rem',
+    backgroundColor: 'transparent',
+
+    // border: `2px solid ${theme.palette.primary.contrastText}`,
+    '&.Mui-focused': {
+      backgroundColor: 'transparent'
+
+      // border: `2px solid ${theme.palette.primary.contrastText}`
+    }
+  },
+  '& .MuiOutlinedInput-input': {
+    // color: theme.palette.primary.contrastText,
+    fontWeight: 500,
+    padding: '0.25rem 1rem'
+  }
+
+  // '& .MuiInputLabel-outlined': {
+  //   color: theme.palette.primary.contrastText,
+  //   '&.Mui-focused': {
+  //     color: theme.palette.primary.contrastText
+  //   }
+  // }
+}))
+
+export const Label = styled(Typography)(({ theme }) => ({
+  fontWeight: 500,
+  fontSize: '1rem',
+
+  letterSpacing: '0.18px',
+  marginBottom: theme.spacing(2)
+}))
+
+// ** Styles
+export const useStyles = makeStyles(theme => ({
+  icon: {},
+  checkbox: {
+    '&.Mui-checked': {
+      // color: theme.palette.primary.contrastText
+      color: 'red'
+    }
+  },
+  button: {
+    borderRadius: '5rem',
+    marginTop: '6px',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  iconRight: {
+    marginLeft: 'auto !important'
+  },
+  translator: {
+    marginTop: '5rem',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '12rem',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    borderRadius: '0.5rem',
+    padding: '0.3rem 0.4rem'
+  },
+  selector: {
+    marginLeft: '1rem',
+
+    '& svg': {
+      display: 'none'
+    },
+
+    '& div': {
+      paddingRight: '0 !important'
+    }
+  },
+  language: {
+    fontWeight: 500,
+    fontSize: '1.4rem'
+  }
 }))

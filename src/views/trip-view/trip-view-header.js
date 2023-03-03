@@ -61,42 +61,17 @@ function TripViewHeader({}) {
         >
           <Grid container spacing={1} sx={{ justifyContent: 'flex-end' }}>
             <Grid item xs={12} sm={6} md={3} lg={2}>
-              <Button variant='extended' color='success' onClick={handleClickOpen}>
+              {/* <Button variant='extended' color='success' onClick={handleClickOpen}>
                 Add Trip
-              </Button>
+              </Button> */}
             </Grid>
           </Grid>
 
-          <Dialog open={open} onClose={handleClose} aria-labelledby='add-trip'>
+          {/* <Dialog open={open} onClose={handleClose} aria-labelledby='add-trip'>
             <DialogTitle id='add-trip'>Add Trip</DialogTitle>
             <DialogContent>
               <DialogContentText sx={{ mb: 3 }}>Enter trip data to start your trip.</DialogContentText>
-              {/* <form name='add-permissions' onSubmit={formik.handleSubmit}>
-                <div>
-                  <TextLabel id='permission-name'>Permission Name</TextLabel>
-                  <TextInput
-                    id='name'
-                    autoFocus
-                    fullWidth
-                    type='text'
-                    placeholder='Enter permission name'
-                    value={formik.values.name}
-                    {...formik.getFieldProps('name')}
-                  />
-                </div>
-
-                <div>
-                  <TextLabel id='permission-name'>Group Name</TextLabel>
-                  <TextInput
-                    id='group'
-                    fullWidth
-                    type='text'
-                    placeholder='Enter group name'
-                    value={formik.values.group}
-                    {...formik.getFieldProps('group')}
-                  />
-                </div>
-              </form> */}
+              Form goes here
             </DialogContent>
             <DialogActions className='dialog-actions-dense'>
               <Button variant='extended' color='error' onClick={handleClose}>
@@ -106,7 +81,7 @@ function TripViewHeader({}) {
                 Add
               </Button>
             </DialogActions>
-          </Dialog>
+          </Dialog> */}
         </Grid>
       </Grid>
     </>

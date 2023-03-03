@@ -25,13 +25,8 @@ import MuiFormControlLabel from '@mui/material/FormControlLabel'
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
 
-// ** Third Party Imports
-import * as yup from 'yup'
-import { useForm, Controller } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
-
 // ** Hooks
-import { useAuth } from 'src/hooks/useAuth'
+import useJwt from 'src/auth/jwt/useJwt'
 import useBgColor from 'src/@core/hooks/useBgColor'
 import { useSettings } from 'src/@core/hooks/useSettings'
 
@@ -43,6 +38,15 @@ import BlankLayout from 'src/@core/layouts/BlankLayout'
 
 // ** Demo Imports
 import FooterIllustrationsV2 from 'src/views/pages/auth/FooterIllustrationsV2'
+
+// ** Third Party Imports
+import * as Yup from 'yup'
+import { useFormik } from 'formik'
+
+// ** Store && Actions
+import { useDispatch, useSelector } from 'react-redux'
+import { login } from 'src/store/authentication/authAction'
+import { EmailField, Label, PasswordField, useStyles } from 'src/styles/input'
 
 // ** Styled Components
 const LoginIllustrationWrapper = styled(Box)(({ theme }) => ({
@@ -94,51 +98,52 @@ const FormControlLabel = styled(MuiFormControlLabel)(({ theme }) => ({
   }
 }))
 
-const schema = yup.object().shape({
-  email: yup.string().email().required(),
-  password: yup.string().min(5).required()
-})
-
-const defaultValues = {
-  password: 'admin',
-  email: 'admin@tracking.me'
-}
-
 const LoginPage = () => {
+  const classes = useStyles()
   const [rememberMe, setRememberMe] = useState(true)
   const [showPassword, setShowPassword] = useState(false)
 
   // ** Hooks
-  const auth = useAuth()
   const theme = useTheme()
   const bgColors = useBgColor()
   const { settings } = useSettings()
   const hidden = useMediaQuery(theme.breakpoints.down('md'))
 
+  // ** redux
+  const dispatch = useDispatch()
+  const { errors } = useSelector(state => state.auth)
+
   // ** Vars
   const { skin } = settings
 
-  const {
-    control,
-    setError,
-    handleSubmit,
-    formState: { errors }
-  } = useForm({
-    defaultValues,
-    mode: 'onBlur',
-    resolver: yupResolver(schema)
+  const schema = Yup.object().shape({
+    email: Yup.string().required(),
+    password: Yup.string().min(3).required()
   })
 
-  const onSubmit = data => {
-    const { email, password } = data
-    auth.login({ email, password, rememberMe }, () => {
-      setError('email', {
-        type: 'manual',
-        message: 'Email or Password is invalid'
-      })
-    })
-  }
   const imageSource = skin === 'bordered' ? 'auth-v2-login-illustration-bordered' : 'auth-v2-login-illustration'
+
+  const formik = useFormik({
+    initialValues: {
+      userEmail: '',
+      password: ''
+    },
+    validationSchema: schema,
+    enableReinitialize: true,
+    onSubmit: values => {
+      const data = {
+        tokenId: '-1',
+        userEmail: values.email,
+        password: values.password
+      }
+
+      const base64encoded = btoa(JSON.stringify(data))
+
+      if (base64encoded) {
+        dispatch(login(data))
+      }
+    }
+  })
 
   return (
     <Box className='content-right'>
@@ -184,68 +189,56 @@ const LoginPage = () => {
               <TypographyStyled variant='h5'>{`Welcome to ${themeConfig.templateName}! 👋🏻`}</TypographyStyled>
               <Typography variant='body2'>Please sign-in to your account and start the adventure</Typography>
             </Box>
-            <Alert icon={false} sx={{ py: 3, mb: 6, ...bgColors.primaryLight, '& .MuiAlert-message': { p: 0 } }}>
+            {/* <Alert icon={false} sx={{ py: 3, mb: 6, ...bgColors.primaryLight, '& .MuiAlert-message': { p: 0 } }}>
               <Typography variant='caption' sx={{ mb: 2, display: 'block', color: 'primary.main' }}>
                 Admin: <strong>admin@tracking.me</strong> / Pass: <strong>admin</strong>
               </Typography>
-              {/* <Typography variant='caption' sx={{ display: 'block', color: 'primary.main' }}>
-                Client: <strong>admin@tracking.me</strong> / Pass: <strong>client</strong>
-              </Typography> */}
-            </Alert>
-            <form noValidate autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
+            </Alert> */}
+            <form noValidate autoComplete='off' onSubmit={formik.handleSubmit}>
               <FormControl fullWidth sx={{ mb: 4 }}>
-                <Controller
-                  name='email'
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange, onBlur } }) => (
-                    <TextField
-                      autoFocus
-                      label='Email'
-                      value={value}
-                      onBlur={onBlur}
-                      onChange={onChange}
-                      error={Boolean(errors.email)}
-                      placeholder='admin@tracking.me'
-                    />
-                  )}
+                <Label>Email / User Name</Label>
+                <EmailField
+                  autoFocus
+                  error={Boolean(formik.errors.email)}
+                  placeholder='Enter your username'
+                  className='login-input'
+                  {...formik.getFieldProps('email')}
                 />
-                {errors.email && <FormHelperText sx={{ color: 'error.main' }}>{errors.email.message}</FormHelperText>}
-              </FormControl>
-              <FormControl fullWidth>
-                <InputLabel htmlFor='auth-login-v2-password' error={Boolean(errors.password)}>
-                  Password
-                </InputLabel>
-                <Controller
-                  name='password'
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field: { value, onChange, onBlur } }) => (
-                    <OutlinedInput
-                      value={value}
-                      onBlur={onBlur}
-                      label='Password'
-                      onChange={onChange}
-                      id='auth-login-v2-password'
-                      error={Boolean(errors.password)}
-                      type={showPassword ? 'text' : 'password'}
-                      endAdornment={
-                        <InputAdornment position='end'>
-                          <IconButton
-                            edge='end'
-                            onMouseDown={e => e.preventDefault()}
-                            onClick={() => setShowPassword(!showPassword)}
-                          >
-                            <Icon icon={showPassword ? 'mdi:eye-outline' : 'mdi:eye-off-outline'} fontSize={20} />
-                          </IconButton>
-                        </InputAdornment>
-                      }
-                    />
-                  )}
-                />
-                {errors.password && (
+                {formik.touched.email && formik.errors.email && (
                   <FormHelperText sx={{ color: 'error.main' }} id=''>
-                    {errors.password.message}
+                    {formik.errors.email}
+                  </FormHelperText>
+                )}
+              </FormControl>
+
+              <FormControl fullWidth>
+                <Label>Password</Label>
+                <PasswordField
+                  placeholder='Enter your password'
+                  id='auth-login-v2-password'
+                  error={Boolean(formik.errors.password)}
+                  type={showPassword ? 'text' : 'password'}
+                  {...formik.getFieldProps('password')}
+                  endAdornment={
+                    <InputAdornment position='end'>
+                      <IconButton
+                        edge='end'
+                        onMouseDown={e => e.preventDefault()}
+                        onClick={() => setShowPassword(!showPassword)}
+                      >
+                        <Icon
+                          className={classes.icon}
+                          icon={showPassword ? 'mdi:eye-outline' : 'mdi:eye-off-outline'}
+                          fontSize={20}
+                        />
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                />
+
+                {formik.touched.password && formik.errors.password && (
+                  <FormHelperText sx={{ color: 'error.main' }} id=''>
+                    {formik.errors.password}
                   </FormHelperText>
                 )}
               </FormControl>
@@ -265,15 +258,24 @@ const LoginPage = () => {
                   Forgot Password?
                 </Typography>
               </Box>
+
+              {errors && (
+                <FormHelperText
+                  sx={{
+                    fontSize: '1rem',
+                    fontWeight: '600',
+                    color: 'error.main',
+                    textAlign: 'center',
+                    marginBottom: '5px'
+                  }}
+                >
+                  {errors}
+                </FormHelperText>
+              )}
+
               <Button fullWidth size='large' type='submit' variant='contained' sx={{ mb: 7 }}>
                 Login
               </Button>
-              <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
-                <Typography sx={{ mr: 2, color: 'text.secondary' }}>New on our platform?</Typography>
-                <Typography href='/register' component={Link} sx={{ color: 'primary.main', textDecoration: 'none' }}>
-                  Create an account
-                </Typography>
-              </Box>
             </form>
           </BoxWrapper>
         </Box>

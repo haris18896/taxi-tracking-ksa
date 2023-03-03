@@ -8,7 +8,7 @@ import { useRouter } from 'next/router'
 import Spinner from 'src/@core/components/spinner'
 
 // ** Hook Imports
-import { useAuth } from 'src/hooks/useAuth'
+import useJwt from 'src/auth/jwt/useJwt'
 
 export const getHomeRoute = role => {
   if (role === 'client') return '/acl'
@@ -17,7 +17,7 @@ export const getHomeRoute = role => {
 
 const Home = () => {
   // ** Hooks
-  const auth = useAuth()
+  const user = useJwt.getUserData()
   const router = useRouter()
 
   useEffect(() => {
@@ -25,8 +25,8 @@ const Home = () => {
       return
     }
 
-    if (auth.user && auth.user.role) {
-      const homeRoute = getHomeRoute(auth.user.role)
+    if (user && user.driverId) {
+      const homeRoute = getHomeRoute(user.role)
 
       // Redirect user to Home URL
       router.replace(homeRoute)

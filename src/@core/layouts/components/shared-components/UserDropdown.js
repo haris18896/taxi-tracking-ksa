@@ -17,8 +17,10 @@ import Typography from '@mui/material/Typography'
 // ** Icon Imports
 import Icon from 'src/@core/components/icon'
 
+import { handleLogout } from 'src/store/authentication/authSlice'
+import { useDispatch } from 'react-redux'
+
 // ** Context
-import { useAuth } from 'src/hooks/useAuth'
 
 // ** Styled Components
 const BadgeContentSpan = styled('span')(({ theme }) => ({
@@ -32,13 +34,14 @@ const BadgeContentSpan = styled('span')(({ theme }) => ({
 const UserDropdown = props => {
   // ** Props
   const { settings } = props
+  const dispatch = useDispatch()
 
   // ** States
   const [anchorEl, setAnchorEl] = useState(null)
 
   // ** Hooks
   const router = useRouter()
-  const { logout } = useAuth()
+
 
   // ** Vars
   const { direction } = settings
@@ -70,7 +73,7 @@ const UserDropdown = props => {
   }
 
   const handleLogout = () => {
-    logout()
+    dispatch(handleLogout())
     handleDropdownClose()
   }
 

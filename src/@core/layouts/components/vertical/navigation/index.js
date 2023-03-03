@@ -20,7 +20,8 @@ import { hexToRGBA } from 'src/@core/utils/hex-to-rgba'
 import { Typography } from '@mui/material'
 
 // ** Hooks
-import { useAuth } from 'src/hooks/useAuth'
+import { handleLogout } from 'src/store/authentication/authSlice'
+import { useDispatch } from 'react-redux'
 
 const StyledBoxForShadow = styled(Box)(({ theme }) => ({
   top: 60,
@@ -40,7 +41,7 @@ const StyledBoxForShadow = styled(Box)(({ theme }) => ({
 const Navigation = props => {
   // ** Props
   const { hidden, settings, afterNavMenuContent, beforeNavMenuContent, navMenuContent: userNavMenuContent } = props
-  const { logout } = useAuth()
+  const dispatch = useDispatch()
 
   // ** States
   const [navHover, setNavHover] = useState(false)
@@ -151,7 +152,7 @@ const Navigation = props => {
       </Box>
       <Typography
         variant='body'
-        onClick={() => logout()}
+        onClick={() => dispatch(handleLogout())}
         color='error'
         sx={{ mt: 'auto', mb: 10, px: 2, mx: 2, textAlign: 'center', cursor: 'pointer' }}
       >

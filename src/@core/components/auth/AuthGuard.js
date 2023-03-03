@@ -5,18 +5,22 @@ import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 
 // ** Hooks Import
-import { useAuth } from 'src/hooks/useAuth'
+import useJwt from 'src/auth/jwt/useJwt'
+
+// ** Store
+import { useSelector } from 'react-redux'
 
 const AuthGuard = props => {
   const { children, fallback } = props
-  const auth = useAuth()
+  const user = useJwt.getUserData()
+  const { loginInProgress } = useSelector(state => state.auth)
   const router = useRouter()
   useEffect(
     () => {
       if (!router.isReady) {
         return
       }
-      if (auth.user === null && !window.localStorage.getItem('userData')) {
+      if (user?.driverId === null && !window.localStorage.getItem('userData')) {
         if (router.asPath !== '/') {
           router.replace({
             pathname: '/login',
@@ -30,7 +34,7 @@ const AuthGuard = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [router.route]
   )
-  if (auth.loading || auth.user === null) {
+  if (loginInProgress) {
     return fallback
   }
 
