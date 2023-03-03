@@ -52,14 +52,11 @@ export default class JwtService {
     localStorage.setItem('userData', JSON.stringify(value))
   }
 
-  login(data) {
-    const options = {
-      headers: {
-        // Cookie: 'X-Oracle-BMC-LBS-Route=572909ab1e17b75a264258a22c92fb09cbf65764'
-      }
-    }
+  login(base64encoded) {
+    var data = new FormData()
+    data.append('postData', base64encoded)
 
-    return axios.post(this.jwtConfig.loginEndpoint, data, options)
+    return axios.post(this.jwtConfig.loginEndpoint, data)
   }
 
   getDriverDetails(data) {

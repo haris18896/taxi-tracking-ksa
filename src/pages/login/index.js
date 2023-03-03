@@ -48,6 +48,7 @@ import { useFormik } from 'formik'
 import { useDispatch, useSelector } from 'react-redux'
 import { login } from 'src/store/authentication/authAction'
 import { EmailField, Label, PasswordField, useStyles } from 'src/styles/input'
+import { useRouter } from 'next/router'
 
 // ** Styled Components
 const LoginIllustrationWrapper = styled(Box)(({ theme }) => ({
@@ -101,6 +102,7 @@ const FormControlLabel = styled(MuiFormControlLabel)(({ theme }) => ({
 
 const LoginPage = () => {
   const classes = useStyles()
+  const router = useRouter()
   const [rememberMe, setRememberMe] = useState(true)
   const [showPassword, setShowPassword] = useState(false)
 
@@ -133,7 +135,7 @@ const LoginPage = () => {
     enableReinitialize: true,
     onSubmit: values => {
       const data = {
-        tokenId: '-1',
+        tokenId: -1,
         user: {
           userEmail: values.email,
           password: values.password
@@ -144,10 +146,8 @@ const LoginPage = () => {
       const buffer = Buffer.from(str, 'utf8')
       const base64encoded = buffer.toString('base64')
 
-      console.log('login credentials base64 encoded', base64encoded)
-
       if (base64encoded) {
-        dispatch(login(data))
+        dispatch(login({ base64encoded, callback: () => router.push('/trip-view') }))
       }
     }
   })
@@ -266,7 +266,7 @@ const LoginPage = () => {
                 </Typography>
               </Box>
 
-              {error && (
+              {error && !formik.values.userEmail && (
                 <FormHelperText
                   sx={{
                     fontSize: '1rem',
