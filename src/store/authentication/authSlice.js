@@ -21,12 +21,11 @@ export const AuthReducer = createSlice({
       })
       .addCase(login.fulfilled, (state, action) => {
         state.loginInProgress = false
-        state.errors = null
-        state.user = action.payload
+        state.user = action.payload.data
+        state.error = action.payload.errors
       })
       .addCase(login.rejected, (state, action) => {
         state.loginInProgress = false
-        state.errors = action.payload
         state.user = null
       })
   }

@@ -48,6 +48,8 @@ export const login = createAsyncThunk('auth/login', async ({ data, router }, { r
       router.replace(redirectURL)
     }
 
+    console.log('Authentication response : ', resData)
+
     return resData
   } catch (err) {
     return rejectWithValue(err?.response?.data.message || err.message)

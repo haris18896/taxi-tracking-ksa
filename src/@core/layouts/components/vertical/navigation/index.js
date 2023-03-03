@@ -22,6 +22,7 @@ import { Typography } from '@mui/material'
 // ** Hooks
 import { handleLogout } from 'src/store/authentication/authSlice'
 import { useDispatch } from 'react-redux'
+import { useRouter } from 'next/router'
 
 const StyledBoxForShadow = styled(Box)(({ theme }) => ({
   top: 60,
@@ -42,6 +43,8 @@ const Navigation = props => {
   // ** Props
   const { hidden, settings, afterNavMenuContent, beforeNavMenuContent, navMenuContent: userNavMenuContent } = props
   const dispatch = useDispatch()
+
+  const router = useRouter()
 
   // ** States
   const [navHover, setNavHover] = useState(false)
@@ -152,7 +155,10 @@ const Navigation = props => {
       </Box>
       <Typography
         variant='body'
-        onClick={() => dispatch(handleLogout())}
+        onClick={() => {
+          dispatch(handleLogout())
+          router.push('/login')
+        }}
         color='error'
         sx={{ mt: 'auto', mb: 10, px: 2, mx: 2, textAlign: 'center', cursor: 'pointer' }}
       >

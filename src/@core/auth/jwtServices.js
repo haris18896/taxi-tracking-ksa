@@ -53,7 +53,13 @@ export default class JwtService {
   }
 
   login(data) {
-    return axios.post(this.jwtConfig.loginEndpoint, data)
+    const options = {
+      headers: {
+        // Cookie: 'X-Oracle-BMC-LBS-Route=572909ab1e17b75a264258a22c92fb09cbf65764'
+      }
+    }
+
+    return axios.post(this.jwtConfig.loginEndpoint, data, options)
   }
 
   getDriverDetails(data) {

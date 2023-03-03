@@ -79,7 +79,7 @@ export const PasswordField = styled(OutlinedInput)(({ theme }) => ({
   // border: `2px solid ${theme.palette.primary.contrastText}`,
   borderRadius: '5rem',
   '& .MuiOutlinedInput-input': {
-    color: theme.palette.primary.contrastText,
+    // color: theme.palette.primary.contrastText,
     fontWeight: 500,
     padding: '0.25rem 1rem'
   }

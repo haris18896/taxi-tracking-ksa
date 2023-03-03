@@ -1,5 +1,6 @@
 // ** React Imports
 import { useState } from 'react'
+import { Buffer } from 'buffer'
 
 // ** Next Imports
 import Link from 'next/link'
@@ -111,7 +112,7 @@ const LoginPage = () => {
 
   // ** redux
   const dispatch = useDispatch()
-  const { errors } = useSelector(state => state.auth)
+  const { error } = useSelector(state => state.auth)
 
   // ** Vars
   const { skin } = settings
@@ -133,11 +134,17 @@ const LoginPage = () => {
     onSubmit: values => {
       const data = {
         tokenId: '-1',
-        userEmail: values.email,
-        password: values.password
+        user: {
+          userEmail: values.email,
+          password: values.password
+        }
       }
 
-      const base64encoded = btoa(JSON.stringify(data))
+      const str = JSON.stringify(data)
+      const buffer = Buffer.from(str, 'utf8')
+      const base64encoded = buffer.toString('base64')
+
+      console.log('login credentials base64 encoded', base64encoded)
 
       if (base64encoded) {
         dispatch(login(data))
@@ -259,17 +266,17 @@ const LoginPage = () => {
                 </Typography>
               </Box>
 
-              {errors && (
+              {error && (
                 <FormHelperText
                   sx={{
                     fontSize: '1rem',
                     fontWeight: '600',
                     color: 'error.main',
                     textAlign: 'center',
-                    marginBottom: '5px'
+                    marginBottom: '8px'
                   }}
                 >
-                  {errors}
+                  {error[0]?.loginerror}
                 </FormHelperText>
               )}
 
