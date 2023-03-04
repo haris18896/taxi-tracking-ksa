@@ -37,6 +37,8 @@ function TripListing() {
     }
   }, [user?.driverId, dispatch])
 
+  console.log('vehicleId', vehicleId)
+
   return (
     <>
       {show === 'vehiclesList' ? (

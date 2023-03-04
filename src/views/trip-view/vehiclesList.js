@@ -24,11 +24,13 @@ function VehiclesList({ loading, data, onChangeHandler, vehicle }) {
                 control={
                   <Checkbox
                     name={item.vehicleName}
-                    color='primary'
+                    color='info'
                     sx={{ mx: 0.5 }}
                     onChange={e => {
                       if (e.target.checked) {
                         onChangeHandler('vehicleId', item.vehicleId)
+                      } else {
+                        onChangeHandler('vehicleId', '')
                       }
                     }}
                   />
@@ -37,7 +39,7 @@ function VehiclesList({ loading, data, onChangeHandler, vehicle }) {
               />
             </Box>
           ))}
-          <Button color='secondary' disabled={!vehicle} onClick={() => onChangeHandler('show', 'tripsList')}>
+          <Button color='info' disabled={!vehicle} onClick={() => onChangeHandler('show', 'tripsList')}>
             Select Vehicle
           </Button>
         </Box>
