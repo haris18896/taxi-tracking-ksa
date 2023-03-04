@@ -33,7 +33,10 @@
   "npm.packageManager": "yarn",
   // Extension: cSpell
   "cSpell.words": [
-    "Customizer"
+    "Customizer",
+    "dropoff",
+    "mapbox",
+    "mapboxgl"
   ],
   "search-node-modules.path": "node_modules",
   "markdown.extension.toc.updateOnSave": false
