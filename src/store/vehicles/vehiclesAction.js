@@ -6,6 +6,7 @@ export const getAllVehiclesActions = createAsyncThunk(
   async ({ base64encoded }, { rejectWithValue }) => {
     try {
       const res = await useJwt.getVehicles(base64encoded)
+      console.log('res of vehicles : ', base64encoded, res)
 
       return res?.data
     } catch (err) {
@@ -20,6 +21,8 @@ export const getDriverDetailsAction = createAsyncThunk(
     try {
       const res = await useJwt.getDriverDetails(base64encoded)
 
+      console.log('res of driver details : ', base64encoded, res)
+
       return res?.data
     } catch (err) {
       return rejectWithValue(err?.response?.data.message || err.message)
@@ -33,7 +36,7 @@ export const getVehicleTripsAction = createAsyncThunk(
     try {
       const res = await useJwt.getVehicleTrips(base64encoded)
 
-      console.log('res of trips: ', base64encoded, res)
+      console.log('res of trips: ', base64encoded, res?.data?.data)
 
       callback()
 

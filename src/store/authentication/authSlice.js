@@ -10,7 +10,6 @@ export const AuthReducer = createSlice({
   },
   reducers: {
     handleLogout: state => {
-      state.user = {}
       localStorage.clear()
     }
   },
