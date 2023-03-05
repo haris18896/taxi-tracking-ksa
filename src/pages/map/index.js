@@ -55,14 +55,7 @@ const Home = () => {
     const buffer = Buffer.from(str, 'utf8')
     const base64encoded = buffer.toString('base64')
 
-    const getVehiclePositions = () => {
-      dispatch(getVehiclesPositionAction({ base64encoded }))
-    }
-
-    const id = setInterval(getVehiclePositions, 1 * 60 * 1000)
-    setIntervalId(id)
-
-    return () => clearInterval(intervalId)
+    dispatch(getVehiclesPositionAction({ base64encoded }))
   }, [])
 
   useEffect(() => {
