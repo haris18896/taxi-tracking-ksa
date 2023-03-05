@@ -45,18 +45,31 @@ export const columns = ({ router }) => {
     },
     {
       name: 'Start Trip',
-      cell: row => (
-        <Button
-          color='info'
-          onClick={() =>
-            router.push(
-              `/map?pickup=${row?.points[0]?.longitude},${row?.points[0]?.latitude}&dropoff=${row?.points[1]?.longitude},${row?.points[1]?.latitude}`
-            )
-          }
-        >
-          Start
-        </Button>
-      )
+      cell: row => {
+        const duration = moment.duration(row?.mapData?.routes[0].duration, 'seconds')
+        const hours = duration.hours()
+        const minutes = duration.minutes()
+
+        return (
+          <Button
+            color='info'
+            onClick={() =>
+              router.push(
+                `/map?pickup=${row?.points[0]?.longitude},${row?.points[0]?.latitude}&dropoff=${row?.points[1]?.longitude},${row?.points[1]?.latitude}&` +
+                  new URLSearchParams({
+                    pickupLocation: row?.points[0]?.address.slice(0, 20),
+                    dropOffLocation: row?.points[1]?.address.slice(0, 20),
+                    duration: hours > 0 ? `${hours} Hours ${minutes} minutes` : `${minutes} minutes`,
+                    distance: (row?.mapData?.routes[0].distance / 1000).toFixed(1),
+                    cost: (row?.mapData?.routes[0].duration / 100).toFixed(2)
+                  })
+              )
+            }
+          >
+            Start
+          </Button>
+        )
+      }
     }
   ]
 }

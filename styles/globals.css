@@ -23,6 +23,37 @@ code[class*='language-'] {
   padding: 0;
 }
 
+.map-wrapper {
+  height: 100%;
+  position: relative;
+}
+
 .map-container {
   height: 100%;
+}
+
+.back-button-container {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  width: 40px;
+  border-radius: 250px;
+  z-index: 10;
+  background: #e1e1e1;
+  cursor: pointer;
+}
+
+.details-modal {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background-color: rgba(35, 55, 75, 0.5);
+  color: #e1e1e1;
+  padding: 6px 12px;
+  z-index: 10;
+  border-radius: 4px;
 }
