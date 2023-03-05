@@ -1,162 +1,62 @@
-import CustomChip from 'src/@core/components/mui/chip'
+/* eslint-disable react-hooks/rules-of-hooks */
+import { Button } from '@mui/material'
+import moment from 'moment'
+import Link from 'next/link'
 
-export const columns = () => {
+export const columns = ({ router }) => {
   return [
     {
       name: 'Pick Up',
-      selector: row => row?.pickUp
+      selector: row => row?.points[0]?.address
     },
     {
       name: 'Drop Off',
-      selector: row => row?.dropOff
+      selector: row => row?.points[1]?.address
+    },
+    {
+      name: 'Name',
+      selector: row => row?.name
+    },
+    {
+      name: 'Start Date',
+      selector: row => row?.start_date.split(' ')[0]
+    },
+    {
+      name: 'end Date',
+      selector: row => row?.end_date.split(' ')[0]
     },
     {
       name: 'Duration',
-      selector: row => row?.duration
+      cell: row => {
+        const duration = moment.duration(row?.mapData?.routes[0].duration, 'seconds')
+        const hours = duration.hours()
+        const minutes = duration.minutes()
+
+        return <span>{hours > 0 ? `${hours} Hours ${minutes} minutes` : `${minutes} minutes`}</span>
+      }
     },
     {
-      name: 'Driver Name',
-      selector: row => row?.driver
-    },
-    {
-      name: 'Vehicle',
-      selector: row => row?.vehicle
-    },
-    {
-      name: 'Trip',
-      selector: row => row?.trip
-    },
-    {
-      name: 'Date',
-      selector: row => row?.date
-    },
-    {
-      name: 'Status',
-      cell: row => (
-        <CustomChip
-          label={row?.status}
-          size='sm'
-          color={row?.status === 'Completed' ? 'success' : 'error'}
-          skin='light'
-        />
-      )
+      name: 'Distance',
+      selector: row => `${(row?.mapData?.routes[0].distance / 1000).toFixed(1)} Kms`
     },
     {
       name: 'Cost',
-      selector: row => row?.cost
+      selector: row => `$ ${(row?.mapData?.routes[0].duration / 100).toFixed(2)}`
+    },
+    {
+      name: 'Start Trip',
+      cell: row => (
+        <Button
+          color='info'
+          onClick={() =>
+            router.push(
+              `/map?pickup=${row?.points[0]?.longitude},${row?.points[0]?.latitude}&dropoff=${row?.points[1]?.longitude},${row?.points[1]?.latitude}`
+            )
+          }
+        >
+          Start
+        </Button>
+      )
     }
   ]
 }
-
-export const rows = [
-  {
-    pickUp: 'Garden Town, Lahore',
-    dropOff: 'LUMS, lahore',
-    duration: '1 hour',
-    driver: 'John Doe',
-    vehicle: 'Toyota',
-    trip: 'Trip 1',
-    date: '2021-01-01',
-    status: 'Completed',
-    cost: '10'
-  },
-  {
-    pickUp: 'Garden Town, Lahore',
-    dropOff: 'LUMS, lahore',
-    duration: '1 hour',
-    driver: 'John Doe',
-    vehicle: 'Toyota',
-    trip: 'Trip 2',
-    date: '2021-01-01',
-    status: 'Completed',
-    cost: '10'
-  },
-  {
-    pickUp: 'Garden Town, Lahore',
-    dropOff: 'LUMS, lahore',
-    duration: '1 hour',
-    driver: 'John Doe',
-    vehicle: 'Toyota',
-    trip: 'Trip 1',
-    date: '2021-01-01',
-    status: 'Completed',
-    cost: '10'
-  },
-  {
-    pickUp: 'Garden Town, Lahore',
-    dropOff: 'LUMS, lahore',
-    duration: '1 hour',
-    driver: 'John Doe',
-    vehicle: 'Toyota',
-    trip: 'Trip 2',
-    date: '2021-01-01',
-    status: 'Completed',
-    cost: '10'
-  },
-  {
-    pickUp: 'Garden Town, Lahore',
-    dropOff: 'LUMS, lahore',
-    duration: '1 hour',
-    driver: 'John Doe',
-    vehicle: 'Toyota',
-    trip: 'Trip 1',
-    date: '2021-01-01',
-    status: 'Completed',
-    cost: '10'
-  },
-  {
-    pickUp: 'Garden Town, Lahore',
-    dropOff: 'LUMS, lahore',
-    duration: '1 hour',
-    driver: 'John Doe',
-    vehicle: 'Toyota',
-    trip: 'Trip 2',
-    date: '2021-01-01',
-    status: 'Completed',
-    cost: '10'
-  },
-  {
-    pickUp: 'Garden Town, Lahore',
-    dropOff: 'LUMS, lahore',
-    duration: '1 hour',
-    driver: 'John Doe',
-    vehicle: 'Toyota',
-    trip: 'Trip 1',
-    date: '2021-01-01',
-    status: 'Completed',
-    cost: '10'
-  },
-  {
-    pickUp: 'Garden Town, Lahore',
-    dropOff: 'LUMS, lahore',
-    duration: '1 hour',
-    driver: 'John Doe',
-    vehicle: 'Toyota',
-    trip: 'Trip 2',
-    date: '2021-01-01',
-    status: 'Completed',
-    cost: '10'
-  },
-  {
-    pickUp: 'Garden Town, Lahore',
-    dropOff: 'LUMS, lahore',
-    duration: '1 hour',
-    driver: 'John Doe',
-    vehicle: 'Toyota',
-    trip: 'Trip 1',
-    date: '2021-01-01',
-    status: 'Completed',
-    cost: '10'
-  },
-  {
-    pickUp: 'Garden Town, Lahore',
-    dropOff: 'LUMS, lahore',
-    duration: '1 hour',
-    driver: 'John Doe',
-    vehicle: 'Toyota',
-    trip: 'Trip 2',
-    date: '2021-01-01',
-    status: 'Completed',
-    cost: '10'
-  }
-]

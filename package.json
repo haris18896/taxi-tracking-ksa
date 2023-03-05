@@ -59,6 +59,7 @@
     "jsonwebtoken": "8.5.1",
     "keen-slider": "6.8.3",
     "mapbox-gl": "^2.13.0",
+    "moment": "^2.29.4",
     "next": "13.0.0",
     "ngrok": "^4.3.3",
     "node-sass": "^8.0.0",

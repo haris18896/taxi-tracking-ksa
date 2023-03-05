@@ -6,8 +6,9 @@ import { Icon } from '@iconify/react'
 import DataTable, { createTheme } from 'react-data-table-component'
 
 // ** Custom Components
-import { columns, rows } from './table.data'
+import { columns } from './table.data'
 import Spinner from 'src/@core/components/spinner'
+import { useRouter } from 'next/router'
 
 // ** pagination
 // import ReactPagination from 'src/components/pagination'
@@ -51,6 +52,9 @@ function TripViewTable({
   // limit,
   // handlePageChange
 }) {
+  const router = useRouter()
+  console.log('rows :', rows)
+
   return (
     <>
       <DataTable
@@ -59,7 +63,7 @@ function TripViewTable({
         theme='solarized'
         progressPending={loading}
         progressComponent={<Spinner />}
-        columns={columns()}
+        columns={columns({ router })}
         sortIcon={<Icon icon='lucide:chevrons-up-down' width='13' height='13' />}
 
         // rowsPerPage={limit}

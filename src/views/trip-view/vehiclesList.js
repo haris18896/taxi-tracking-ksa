@@ -1,9 +1,13 @@
 import { Button, Checkbox, CircularProgress, FormControlLabel } from '@mui/material'
 import { Box } from '@mui/system'
 import React from 'react'
+import { useDispatch } from 'react-redux'
 import FallbackSpinner from 'src/@core/components/spinner'
+import { getVehicleTripsAction } from 'src/store/vehicles/vehiclesAction'
 
-function VehiclesList({ loading, data, onChangeHandler, vehicle }) {
+function VehiclesList({ loading, data, onChangeHandler, vehicle, getTrips }) {
+  const dispatch = useDispatch()
+
   return (
     <>
       {loading ? (
@@ -19,7 +23,6 @@ function VehiclesList({ loading, data, onChangeHandler, vehicle }) {
         >
           {data.map((item, index) => (
             <Box key={index} sx={{ width: '25%' }}>
-              {/* // checkboxes */}
               <FormControlLabel
                 control={
                   <Checkbox
@@ -39,7 +42,20 @@ function VehiclesList({ loading, data, onChangeHandler, vehicle }) {
               />
             </Box>
           ))}
-          <Button color='info' disabled={!vehicle} onClick={() => onChangeHandler('show', 'tripsList')}>
+          <Button
+            color='info'
+            disabled={!vehicle}
+            onClick={() => {
+              onChangeHandler('show', 'tripsList')
+
+              const data = { vehicle_id: vehicle }
+              const str = JSON.stringify(data)
+              const buffer = Buffer.from(str, 'utf8')
+              const base64encoded = buffer.toString('base64')
+
+              dispatch(getVehicleTripsAction({ base64encoded }))
+            }}
+          >
             Select Vehicle
           </Button>
         </Box>
