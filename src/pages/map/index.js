@@ -22,7 +22,7 @@ const Home = () => {
   const router = useRouter()
   const dispatch = useDispatch()
   const user = useJwt.getUserData()
-  const { driversDetailsPending, driverDetails } = useSelector(state => state.vehicle)
+  const { driversDetailsPending, driverDetails, vehiclePosition } = useSelector(state => state.vehicle)
 
   const { pickup, dropoff, pickupLocation, dropOffLocation, duration, distance, cost, vehicle } = router.query
 
@@ -58,13 +58,6 @@ const Home = () => {
     dispatch(getVehiclesPositionAction({ base64encoded }))
   }, [])
 
-  useEffect(() => {
-    return () => {
-      dispatch(resetVehiclePosition())
-      dispatch(resetDriverDetails())
-    }
-  }, [])
-
   if (driversDetailsPending) {
     return <FallbackSpinner />
   }
@@ -86,7 +79,7 @@ const Home = () => {
         <p>Distance : {`${distance} kms`}</p>
         <p>Cost : ${cost}</p>
       </div>
-      <Map center={center} pickUpCoordinates={pickUpCoordinates} dropoffCoordinates={dropoffCoordinates} />
+      <Map vehiclePosition={vehiclePosition} center={center} pickUpCoordinates={pickUpCoordinates} dropoffCoordinates={dropoffCoordinates} />
     </div>
   )
 }

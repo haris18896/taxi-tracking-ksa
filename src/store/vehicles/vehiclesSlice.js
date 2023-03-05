@@ -90,7 +90,7 @@ export const VehiclesReducer = createSlice({
       })
       .addCase(getVehiclesPositionAction.fulfilled, (state, action) => {
         state.vehiclePositionPending = false
-        state.vehiclePosition = action.payload?.data?.vehiclePosition
+        state.vehiclePosition = action.payload?.data?.vehicleposition[0]
       })
   }
 })

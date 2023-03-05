@@ -13,10 +13,15 @@ const Map = props => {
     const marker = new mapboxgl.Marker().setLngLat(coordinates).addTo(map)
   }
 
+  const vehicleCenter = [parseFloat(props.vehiclePosition?.longitude), parseFloat(props.vehiclePosition?.latitude)]
+  console.log('vehiclePosition : ', vehicleCenter)
+
   useEffect(() => {
     const map = new mapboxgl.Map({
       container: mapContainer.current,
       style: 'mapbox://styles/mapbox/dark-v11',
+
+      // center: vehicleCenter ? vehicleCenter : props.pickUpCoordinates,
       center: props.pickUpCoordinates,
       zoom: 9
     })
