@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux'
 import FallbackSpinner from 'src/@core/components/spinner'
 import { getVehicleTripsAction } from 'src/store/vehicles/vehiclesAction'
 
-function VehiclesList({ loading, data, onChangeHandler, vehicle, getTrips }) {
+function VehiclesList({ loading, data, onChangeHandler, vehicle }) {
   const dispatch = useDispatch()
 
   return (
@@ -36,6 +36,7 @@ function VehiclesList({ loading, data, onChangeHandler, vehicle, getTrips }) {
                         onChangeHandler('vehicleId', '')
                       }
                     }}
+                    checked={item.vehicleId === vehicle}
                   />
                 }
                 label={item.vehicleName}

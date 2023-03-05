@@ -72,14 +72,19 @@ const Home = () => {
         <p>
           Driver Name: {driverDetails?.data && `${driverDetails?.data[0]?.name} ${driverDetails?.data[0]?.lastname}`}
         </p>
-        <p>Pickup : {driverDetails?.data && `${driverDetails?.data[0]?.mobileno}`}</p>
+        <p>Phone : {driverDetails?.data && `${driverDetails?.data[0]?.mobileno}`}</p>
         <p>Pickup : {pickupLocation}</p>
         <p>Dropoff : {dropOffLocation}</p>
         <p>Duration : {duration}</p>
         <p>Distance : {`${distance} kms`}</p>
         <p>Cost : ${cost}</p>
       </div>
-      <Map vehiclePosition={vehiclePosition} center={center} pickUpCoordinates={pickUpCoordinates} dropoffCoordinates={dropoffCoordinates} />
+      <Map
+        vehiclePosition={vehiclePosition}
+        center={center}
+        pickUpCoordinates={pickUpCoordinates}
+        dropoffCoordinates={dropoffCoordinates}
+      />
     </div>
   )
 }

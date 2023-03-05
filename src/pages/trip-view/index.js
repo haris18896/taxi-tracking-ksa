@@ -44,7 +44,7 @@ function TripListing() {
     for (const [key, value] of Object.entries(tripsList)) {
       try {
         const response = await fetch(
-          `https://api.mapbox.com/directions/v5/mapbox/driving/${value?.points[0]?.longitude},${value?.points[0]?.latitude};${value?.points[1]?.longitude},${value?.points[1]?.latitude}?` +
+          `https://api.mapbox.com/directions/v5/mapbox/driving/${value?.points[0]?.longitude},${value?.points[0]?.latitude};${value?.points[1]?.longitude},${value?.points[1]?.latitude}?annotations=maxspeed&overview=full&geometries=geojson&` +
             new URLSearchParams({
               access_token:
                 'pk.eyJ1IjoiaGFyaXN0cmFja2luZyIsImEiOiJjbGVneWQ3anowanJvM3ZsZDdiNTB2aGk2In0.-YLuxE0bmfGbf8x3GH3n7A'
