@@ -17,11 +17,9 @@ const Map = props => {
     const map = new mapboxgl.Map({
       container: mapContainer.current,
       style: 'mapbox://styles/mapbox/dark-v11',
-      center: [74.3451755, 31.5113502],
+      center: props.pickUpCoordinates,
       zoom: 9
     })
-
-    // addToMap(map, [74.3451755, 31.5113502])
 
     if (props.pickUpCoordinates) {
       addToMap(map, props.pickUpCoordinates)

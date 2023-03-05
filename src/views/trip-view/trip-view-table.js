@@ -53,8 +53,7 @@ function TripViewTable({
   // handlePageChange
 }) {
   const router = useRouter()
-  console.log('rows :', rows)
-
+  
   return (
     <>
       <DataTable

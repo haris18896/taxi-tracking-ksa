@@ -14,24 +14,24 @@ const Home = () => {
   const pickUpCoordinates = pickup && [pickup.split(',')[0], pickup.split(',')[1]]
   const dropoffCoordinates = dropoff && [dropoff.split(',')[0], pickup.split(',')[1]]
 
-  console.log('pickupCoordinates : ', pickUpCoordinates, 'dropoffCoordinates : ', dropoffCoordinates)
-  useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        position => {
-          setCenter({
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude
-          })
-        },
-        error => {
-          console.log(error)
-        }
-      )
-    } else {
-      console.log('Geolocation is not supported by this browser.')
-    }
-  }, [])
+  // console.log('pickupCoordinates : ', pickUpCoordinates, 'dropoffCoordinates : ', dropoffCoordinates)
+  // useEffect(() => {
+  //   if (navigator.geolocation) {
+  //     navigator.geolocation.getCurrentPosition(
+  //       position => {
+  //         setCenter({
+  //           latitude: position.coords.latitude,
+  //           longitude: position.coords.longitude
+  //         })
+  //       },
+  //       error => {
+  //         console.log(error)
+  //       }
+  //     )
+  //   } else {
+  //     console.log('Geolocation is not supported by this browser.')
+  //   }
+  // }, [])
 
   return (
     <>
