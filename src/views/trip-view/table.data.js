@@ -3,7 +3,7 @@ import { Button } from '@mui/material'
 import moment from 'moment'
 import Link from 'next/link'
 
-export const columns = ({ router }) => {
+export const columns = ({ router, vehicleId }) => {
   return [
     {
       name: 'Pick Up',
@@ -61,7 +61,8 @@ export const columns = ({ router }) => {
                     dropOffLocation: row?.points[1]?.address.slice(0, 20),
                     duration: hours > 0 ? `${hours} Hours ${minutes} minutes` : `${minutes} minutes`,
                     distance: (row?.mapData?.routes[0].distance / 1000).toFixed(1),
-                    cost: (row?.mapData?.routes[0].duration / 100).toFixed(2)
+                    cost: (row?.mapData?.routes[0].duration / 100).toFixed(2),
+                    vehicle: vehicleId
                   })
               )
             }

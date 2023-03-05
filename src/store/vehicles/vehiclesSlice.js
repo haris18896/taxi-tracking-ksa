@@ -23,7 +23,12 @@ export const VehiclesReducer = createSlice({
     vehiclePosition: [],
     error: null
   },
-  reducers: {},
+  reducers: {
+    resetVehiclePosition: state => (state.vehiclePosition = []),
+    resetDriverDetails: state => (state.driverDetails = []),
+    resetVehiclesList: state => (state.vehiclesList = []),
+    resetTripsList: state => (state.tripsList = [])
+  },
   extraReducers: builder => {
     builder
 
@@ -85,9 +90,11 @@ export const VehiclesReducer = createSlice({
       })
       .addCase(getVehiclesPositionAction.fulfilled, (state, action) => {
         state.vehiclePositionPending = false
-        state.vehiclePosition = action.payload
+        state.vehiclePosition = action.payload?.data?.vehiclePosition
       })
   }
 })
+
+export const { resetTripsList, resetVehiclesList, resetDriverDetails, resetVehiclePosition } = VehiclesReducer.actions
 
 export default VehiclesReducer.reducer

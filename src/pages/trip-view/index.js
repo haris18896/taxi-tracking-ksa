@@ -84,7 +84,7 @@ function TripListing() {
       ) : show === 'tripsList' ? (
         <>
           <Title>Trips List</Title>
-          <TripViewTable loading={tripsListPending} rows={data} />
+          <TripViewTable loading={tripsListPending} rows={data} vehicleId={vehicleId} />
         </>
       ) : null}
     </>

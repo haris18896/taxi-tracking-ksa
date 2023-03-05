@@ -45,7 +45,8 @@ createTheme(
 
 function TripViewTable({
   rows,
-  loading
+  loading,
+  vehicleId
 
   // page,
   // total,
@@ -62,7 +63,7 @@ function TripViewTable({
         theme='solarized'
         progressPending={loading}
         progressComponent={<Spinner />}
-        columns={columns({ router })}
+        columns={columns({ router, vehicleId })}
         sortIcon={<Icon icon='lucide:chevrons-up-down' width='13' height='13' />}
 
         // rowsPerPage={limit}

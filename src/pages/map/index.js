@@ -14,28 +14,62 @@ import Map from 'src/views/map'
 
 // ** Store & Actions
 import { useDispatch, useSelector } from 'react-redux'
-import { getDriverDetailsAction } from 'src/store/vehicles/vehiclesAction'
+import { getDriverDetailsAction, getVehiclesPositionAction } from 'src/store/vehicles/vehiclesAction'
 import FallbackSpinner from 'src/@core/components/spinner'
+import { resetDriverDetails, resetVehiclePosition } from 'src/store/vehicles/vehiclesSlice'
 
 const Home = () => {
   const router = useRouter()
   const dispatch = useDispatch()
+  const user = useJwt.getUserData()
   const { driversDetailsPending, driverDetails } = useSelector(state => state.vehicle)
 
-  const { pickup, dropoff, pickupLocation, dropOffLocation, duration, distance, cost } = router.query
+  const { pickup, dropoff, pickupLocation, dropOffLocation, duration, distance, cost, vehicle } = router.query
+
+  const [intervalId, setIntervalId] = useState(null)
   const [center, setCenter] = useState({ latitude: null, longitude: null })
 
   const pickUpCoordinates = pickup && [pickup.split(',')[0], pickup.split(',')[1]]
   const dropoffCoordinates = dropoff && [dropoff.split(',')[0], pickup.split(',')[1]]
 
   useEffect(() => {
-    const user = useJwt.getUserData()
     const data = { driver_id: user?.driverId }
     const str = JSON.stringify(data)
     const buffer = Buffer.from(str, 'utf8')
     const base64encoded = buffer.toString('base64')
 
     dispatch(getDriverDetailsAction({ base64encoded }))
+  }, [])
+
+  useEffect(() => {
+    const data = {
+      tokenId: '',
+      vehicleId: vehicle,
+      userId: user?.userId,
+      isadmin: user?.isadmin,
+      companyId: user?.companyId,
+      refreshduration: '30'
+    }
+
+    const str = JSON.stringify(data)
+    const buffer = Buffer.from(str, 'utf8')
+    const base64encoded = buffer.toString('base64')
+
+    const getVehiclePositions = () => {
+      dispatch(getVehiclesPositionAction({ base64encoded }))
+    }
+
+    const id = setInterval(getVehiclePositions, 1 * 60 * 1000)
+    setIntervalId(id)
+
+    return () => clearInterval(intervalId)
+  }, [])
+
+  useEffect(() => {
+    return () => {
+      dispatch(resetVehiclePosition())
+      dispatch(resetDriverDetails())
+    }
   }, [])
 
   if (driversDetailsPending) {
