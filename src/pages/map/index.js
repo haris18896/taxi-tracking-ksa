@@ -156,6 +156,13 @@ const Home = () => {
     })
   }, [pickUpCoordinates, dropoffCoordinates])
 
+  // useEffect(() => {
+  //   return () => {
+  //     dispatch(resetDriverDetails())
+  //     dispatch(resetVehiclePosition())
+  //   }
+  // }, [])
+
   return (
     <div className='map-wrapper'>
       <div className='back-button-container' onClick={() => router.push('/trip-view')}>

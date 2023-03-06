@@ -24,8 +24,8 @@ export const VehiclesReducer = createSlice({
     error: null
   },
   reducers: {
-    resetVehiclePosition: state => (state.vehiclePosition = []),
-    resetDriverDetails: state => (state.driverDetails = []),
+    resetVehiclePosition: state => (state.vehiclePosition = {}),
+    resetDriverDetails: state => (state.driverDetails = {}),
     resetVehiclesList: state => (state.vehiclesList = []),
     resetTripsList: state => (state.tripsList = [])
   },

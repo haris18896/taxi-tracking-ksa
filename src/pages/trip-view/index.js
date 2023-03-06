@@ -12,6 +12,8 @@ import { getAllVehiclesActions, getVehicleTripsAction } from 'src/store/vehicles
 import VehiclesList from 'src/views/trip-view/vehiclesList'
 import { Title } from 'src/styles/input'
 import { Router } from 'next/router'
+import FallbackSpinner from 'src/@core/components/spinner'
+import { resetVehiclesList } from 'src/store/vehicles/vehiclesSlice'
 
 function TripListing() {
   const dispatch = useDispatch()
@@ -72,15 +74,25 @@ function TripListing() {
       })
   }, [rows])
 
+  // useEffect(() => {
+  //   return () => {
+  //     dispatch(resetVehiclesList())
+  //   }
+  // }, [dispatch])
+
   return (
     <>
       {show === 'vehiclesList' ? (
-        <VehiclesList
-          vehicle={vehicleId}
-          data={vehiclesList}
-          loading={vehiclesListPending}
-          onChangeHandler={onChangeHandler}
-        />
+        vehiclesListPending ? (
+          <FallbackSpinner />
+        ) : (
+          <VehiclesList
+            vehicle={vehicleId}
+            data={vehiclesList}
+            loading={vehiclesListPending}
+            onChangeHandler={onChangeHandler}
+          />
+        )
       ) : show === 'tripsList' ? (
         <>
           <Title>Trips List</Title>
