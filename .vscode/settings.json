@@ -35,10 +35,12 @@
   "cSpell.words": [
     "Customizer",
     "dropoff",
+    "isadmin",
     "lastname",
     "mapbox",
     "mapboxgl",
-    "mobileno"
+    "mobileno",
+    "refreshduration"
   ],
   "search-node-modules.path": "node_modules",
   "markdown.extension.toc.updateOnSave": false
