@@ -19,6 +19,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getDriverDetailsAction, getVehiclesPositionAction } from 'src/store/vehicles/vehiclesAction'
 import FallbackSpinner from 'src/@core/components/spinner'
 import { resetDriverDetails, resetVehiclePosition } from 'src/store/vehicles/vehiclesSlice'
+import { Button } from '@mui/material'
 
 mapboxgl.accessToken =
   'pk.eyJ1IjoiaGFyaXN0cmFja2luZyIsImEiOiJjbGVneWQ3anowanJvM3ZsZDdiNTB2aGk2In0.-YLuxE0bmfGbf8x3GH3n7A'
@@ -172,6 +173,16 @@ const Home = () => {
         <p>Distance : {`${distance} kms`}</p>
         <p>Cost : ${cost}</p>
       </div>
+
+      <Button
+        className='start-trip-button'
+        variant='contained'
+        color='info'
+        disabled
+        onClick={() => console.log('get route from car location to end point')}
+      >
+        Start Trip
+      </Button>
 
       <div ref={mapContainer} className='map-container'>
         {driversDetailsPending ? <FallbackSpinner /> : null}

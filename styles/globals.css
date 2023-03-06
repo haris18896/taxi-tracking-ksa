@@ -57,3 +57,10 @@ code[class*='language-'] {
   z-index: 10;
   border-radius: 4px;
 }
+
+.start-trip-button {
+  position: absolute !important;
+  right: 15px !important;
+  bottom: 25px !important;
+  z-index: 10 !important;
+}
