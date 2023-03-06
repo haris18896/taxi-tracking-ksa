@@ -34,10 +34,14 @@ const Home = () => {
 
   const { driversDetailsPending, driverDetails, vehiclePosition } = useSelector(state => state.vehicle)
 
+  console.log('vehiclePosition : ', vehiclePosition)
+
   const { pickup, dropoff, pickupLocation, dropOffLocation, duration, distance, cost, vehicle } = router.query
 
   const [intervalId, setIntervalId] = useState(null)
-  const [center, setCenter] = useState({ latitude: null, longitude: null })
+  const [carPos, setCarPos] = useState(null)
+
+  console.log('carPos : ', carPos)
 
   const pickUpCoordinates = pickup && [pickup.split(',')[0], pickup.split(',')[1]]
   const dropoffCoordinates = dropoff && [dropoff.split(',')[0], pickup.split(',')[1]]
@@ -82,6 +86,7 @@ const Home = () => {
     return route
   }
 
+  // ** Driver Details
   useEffect(() => {
     const data = { driver_id: user?.driverId }
     const str = JSON.stringify(data)
@@ -91,6 +96,7 @@ const Home = () => {
     dispatch(getDriverDetailsAction({ base64encoded }))
   }, [])
 
+  // ** Vehicle Position
   useEffect(() => {
     const data = {
       tokenId: '',
@@ -105,56 +111,66 @@ const Home = () => {
     const buffer = Buffer.from(str, 'utf8')
     const base64encoded = buffer.toString('base64')
 
-    dispatch(getVehiclesPositionAction({ base64encoded }))
+    dispatch(
+      getVehiclesPositionAction({
+        base64encoded,
+        callback: res => setCarPos([parseFloat(res?.longitude), parseFloat(res?.latitude)])
+      })
+    )
   }, [])
 
   useEffect(() => {
-    const map = new mapboxgl.Map({
-      container: mapContainer.current,
-      style: 'mapbox://styles/mapbox/dark-v11',
-      center: pickUpCoordinates,
-      zoom: 9
-    })
-    map.on('load', () => {
-      if (pickUpCoordinates) {
-        addToMap(map, pickUpCoordinates, `<span>Pick-up point</span>`)
-      }
+    if (carPos) {
+      const map = new mapboxgl.Map({
+        container: mapContainer.current,
+        style: 'mapbox://styles/mapbox/dark-v11',
+        center: carPos,
+        zoom: 9
+      })
 
-      if (dropoffCoordinates) {
-        addToMap(map, dropoffCoordinates, `<span>Drop-off point</span>`)
-      }
+      map.on('load', () => {
+        addToMap(map, carPos, '<p>Car Position</p>')
 
-      if (pickUpCoordinates && dropoffCoordinates) {
-        map.fitBounds([pickUpCoordinates, dropoffCoordinates], {
-          padding: 60
-        })
+        if (pickUpCoordinates) {
+          addToMap(map, pickUpCoordinates, `<span>Pick-up point</span>`)
+        }
 
-        getRoute(pickUpCoordinates, dropoffCoordinates).then(route => {
-          map.addLayer({
-            id: 'route',
-            type: 'line',
-            source: {
-              type: 'geojson',
-              data: {
-                type: 'Feature',
-                geometry: route
-              }
-            },
-            paint: {
-              'line-color': '#3887be',
-              'line-width': 5,
-              'line-opacity': 0.75
-            }
-          })
+        if (dropoffCoordinates) {
+          addToMap(map, dropoffCoordinates, `<span>Drop-off point</span>`)
+        }
 
-          // const routeLength = turf.length(route, { units: 'kilometers' })
-          // const routeDuration = response.body.routes[0].duration / 60 // in minutes
-          // console.log('Route length:', routeLength, 'km')
-          // console.log('Route duration:', routeDuration, 'min')
-        })
-      }
-    })
-  }, [pickUpCoordinates, dropoffCoordinates])
+        // if (pickUpCoordinates && dropoffCoordinates) {
+        //   map.fitBounds([pickUpCoordinates, dropoffCoordinates], {
+        //     padding: 60
+        //   })
+
+        //   getRoute(pickUpCoordinates, dropoffCoordinates).then(route => {
+        //     map.addLayer({
+        //       id: 'route',
+        //       type: 'line',
+        //       source: {
+        //         type: 'geojson',
+        //         data: {
+        //           type: 'Feature',
+        //           geometry: route
+        //         }
+        //       },
+        //       paint: {
+        //         'line-color': '#3887be',
+        //         'line-width': 5,
+        //         'line-opacity': 0.75
+        //       }
+        //     })
+
+        //     // const routeLength = turf.length(route, { units: 'kilometers' })
+        //     // const routeDuration = response.body.routes[0].duration / 60 // in minutes
+        //     // console.log('Route length:', routeLength, 'km')
+        //     // console.log('Route duration:', routeDuration, 'min')
+        //   })
+        // }
+      })
+    }
+  }, [pickUpCoordinates, dropoffCoordinates, carPos])
 
   // useEffect(() => {
   //   return () => {

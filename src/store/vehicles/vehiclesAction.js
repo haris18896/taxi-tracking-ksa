@@ -55,9 +55,10 @@ export const updateTripDataAction = createAsyncThunk(
 
 export const getVehiclesPositionAction = createAsyncThunk(
   'vehicles/getVehiclesPosition',
-  async ({ base64encoded }, { rejectWithValue }) => {
+  async ({ base64encoded, callback }, { rejectWithValue }) => {
     try {
       const res = await useJwt.getVehiclesPosition(base64encoded)
+      callback(res?.data?.data?.vehicleposition[0])
 
       return res?.data
     } catch (err) {
