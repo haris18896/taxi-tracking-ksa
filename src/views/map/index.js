@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
 import mapboxgl from '!mapbox-gl'
-import mapboxSdk from '@mapbox/mapbox-sdk'
 import mapboxDirections from '@mapbox/mapbox-sdk/services/directions'
 
 // import turf from 'turf'

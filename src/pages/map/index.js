@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import 'mapbox-gl/dist/mapbox-gl.css'
 
 import { useRouter } from 'next/router'
@@ -11,7 +11,8 @@ import { Icon } from '@iconify/react'
 import useJwt from 'src/auth/jwt/useJwt'
 
 // ** Components
-import Map from 'src/views/map'
+import mapboxgl from '!mapbox-gl'
+import mapboxDirections from '@mapbox/mapbox-sdk/services/directions'
 
 // ** Store & Actions
 import { useDispatch, useSelector } from 'react-redux'
@@ -19,10 +20,17 @@ import { getDriverDetailsAction, getVehiclesPositionAction } from 'src/store/veh
 import FallbackSpinner from 'src/@core/components/spinner'
 import { resetDriverDetails, resetVehiclePosition } from 'src/store/vehicles/vehiclesSlice'
 
+mapboxgl.accessToken =
+  'pk.eyJ1IjoiaGFyaXN0cmFja2luZyIsImEiOiJjbGVneWQ3anowanJvM3ZsZDdiNTB2aGk2In0.-YLuxE0bmfGbf8x3GH3n7A'
+
 const Home = () => {
   const router = useRouter()
   const dispatch = useDispatch()
   const user = useJwt.getUserData()
+
+  const mapContainer = useRef(null)
+  const directionsClient = mapboxDirections({ accessToken: mapboxgl.accessToken })
+
   const { driversDetailsPending, driverDetails, vehiclePosition } = useSelector(state => state.vehicle)
 
   const { pickup, dropoff, pickupLocation, dropOffLocation, duration, distance, cost, vehicle } = router.query
@@ -32,6 +40,46 @@ const Home = () => {
 
   const pickUpCoordinates = pickup && [pickup.split(',')[0], pickup.split(',')[1]]
   const dropoffCoordinates = dropoff && [dropoff.split(',')[0], pickup.split(',')[1]]
+
+  const addToMap = (map, coordinates, popupContent) => {
+    const marker = new mapboxgl.Marker().setLngLat(coordinates).addTo(map)
+
+    const popup = new mapboxgl.Popup({
+      closeButton: false,
+      offset: [0, -10]
+
+      // className: 'marker-tooltip'
+    }).setHTML(popupContent)
+
+    marker.getElement().addEventListener('mouseenter', () => {
+      popup.setLngLat(coordinates).addTo(map)
+    })
+
+    marker.getElement().addEventListener('mouseleave', () => {
+      popup.remove()
+    })
+  }
+
+  const getRoute = async (start, end) => {
+    const startPoint = [parseFloat(start[0]), parseFloat(start[1])]
+    const endPoint = [parseFloat(end[0]), parseFloat(end[1])]
+
+    const response = await directionsClient
+      .getDirections({
+        waypoints: [{ coordinates: startPoint }, { coordinates: endPoint }],
+        profile: 'driving',
+        geometries: 'geojson'
+      })
+      .send()
+
+    if (response.body.code !== 'Ok') {
+      throw new Error('No route found')
+    }
+
+    const route = response.body.routes[0].geometry
+
+    return route
+  }
 
   useEffect(() => {
     const data = { driver_id: user?.driverId }
@@ -59,9 +107,53 @@ const Home = () => {
     dispatch(getVehiclesPositionAction({ base64encoded }))
   }, [])
 
-  if (driversDetailsPending) {
-    return <FallbackSpinner />
-  }
+  useEffect(() => {
+    const map = new mapboxgl.Map({
+      container: mapContainer.current,
+      style: 'mapbox://styles/mapbox/dark-v11',
+      center: pickUpCoordinates,
+      zoom: 9
+    })
+    map.on('load', () => {
+      if (pickUpCoordinates) {
+        addToMap(map, pickUpCoordinates, `<span>Pick-up point</span>`)
+      }
+
+      if (dropoffCoordinates) {
+        addToMap(map, dropoffCoordinates, `<span>Drop-off point</span>`)
+      }
+
+      if (pickUpCoordinates && dropoffCoordinates) {
+        map.fitBounds([pickUpCoordinates, dropoffCoordinates], {
+          padding: 60
+        })
+
+        getRoute(pickUpCoordinates, dropoffCoordinates).then(route => {
+          map.addLayer({
+            id: 'route',
+            type: 'line',
+            source: {
+              type: 'geojson',
+              data: {
+                type: 'Feature',
+                geometry: route
+              }
+            },
+            paint: {
+              'line-color': '#3887be',
+              'line-width': 5,
+              'line-opacity': 0.75
+            }
+          })
+
+          // const routeLength = turf.length(route, { units: 'kilometers' })
+          // const routeDuration = response.body.routes[0].duration / 60 // in minutes
+          // console.log('Route length:', routeLength, 'km')
+          // console.log('Route duration:', routeDuration, 'min')
+        })
+      }
+    })
+  }, [pickUpCoordinates, dropoffCoordinates])
 
   return (
     <div className='map-wrapper'>
@@ -80,12 +172,10 @@ const Home = () => {
         <p>Distance : {`${distance} kms`}</p>
         <p>Cost : ${cost}</p>
       </div>
-      <Map
-        vehiclePosition={vehiclePosition}
-        center={center}
-        pickUpCoordinates={pickUpCoordinates}
-        dropoffCoordinates={dropoffCoordinates}
-      />
+
+      <div ref={mapContainer} className='map-container'>
+        {driversDetailsPending ? <FallbackSpinner /> : null}
+      </div>
     </div>
   )
 }
