@@ -64,3 +64,15 @@ code[class*='language-'] {
   bottom: 25px !important;
   z-index: 10 !important;
 }
+
+.map-marker img {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.car-marker img {
+  width: 29px;
+  height: 45px;
+  cursor: pointer;
+}

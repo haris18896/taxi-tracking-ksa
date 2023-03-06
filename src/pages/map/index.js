@@ -46,6 +46,7 @@ const Home = () => {
   const pickUpCoordinates = pickup && [pickup.split(',')[0], pickup.split(',')[1]]
   const dropoffCoordinates = dropoff && [dropoff.split(',')[0], pickup.split(',')[1]]
 
+  // ** Marker Function
   const addToMap = (map, coordinates, popupContent) => {
     const marker = new mapboxgl.Marker().setLngLat(coordinates).addTo(map)
 
@@ -65,6 +66,7 @@ const Home = () => {
     })
   }
 
+  // ** Route function
   const getRoute = async (start, end) => {
     const startPoint = [parseFloat(start[0]), parseFloat(start[1])]
     const endPoint = [parseFloat(end[0]), parseFloat(end[1])]
@@ -129,7 +131,7 @@ const Home = () => {
       })
 
       map.on('load', () => {
-        addToMap(map, carPos, '<p>Car Position</p>')
+        addToMap(map, carPos, '<p>Car Position</p>', true)
 
         if (pickUpCoordinates) {
           addToMap(map, pickUpCoordinates, `<span>Pick-up point</span>`)
@@ -137,6 +139,12 @@ const Home = () => {
 
         if (dropoffCoordinates) {
           addToMap(map, dropoffCoordinates, `<span>Drop-off point</span>`)
+        }
+
+        if (pickUpCoordinates && carPos) {
+          // map.fitBounds([carPos, pickUpCoordinates], {
+          //   padding: 60
+          // })
         }
 
         // if (pickUpCoordinates && dropoffCoordinates) {
