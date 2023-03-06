@@ -5,6 +5,7 @@ import 'mapbox-gl/dist/mapbox-gl.css'
 import { useRouter } from 'next/router'
 
 // ** Third Party Components
+import moment from 'moment'
 import { Icon } from '@iconify/react'
 
 // ** hooks
@@ -36,10 +37,13 @@ const Home = () => {
 
   console.log('vehiclePosition : ', vehiclePosition)
 
-  const { pickup, dropoff, pickupLocation, dropOffLocation, duration, distance, cost, vehicle } = router.query
+  const { pickup, dropoff, pickupLocation, dropOffLocation, cost, vehicle } = router.query
 
-  const [intervalId, setIntervalId] = useState(null)
   const [carPos, setCarPos] = useState(null)
+  const [mapData, setMapData] = useState(null)
+  const [hours, setHours] = useState(null)
+  const [minutes, setMinutes] = useState(null)
+  const [intervalId, setIntervalId] = useState(null)
 
   console.log('carPos : ', carPos)
 
@@ -102,6 +106,28 @@ const Home = () => {
     return route
   }
 
+  // ** Map Data
+  const getMapData = (start, end) => {
+    fetch(
+      `https://api.mapbox.com/directions/v5/mapbox/driving/${parseFloat(start[0])},${start[1]};${end[0]},${
+        end[1]
+      }?annotations=maxspeed&overview=full&geometries=geojson&` +
+        new URLSearchParams({
+          access_token:
+            'pk.eyJ1IjoiaGFyaXN0cmFja2luZyIsImEiOiJjbGVneWQ3anowanJvM3ZsZDdiNTB2aGk2In0.-YLuxE0bmfGbf8x3GH3n7A'
+        })
+    )
+      .then(response => {
+        return response.json()
+      })
+      .then(data => {
+        setMapData(data)
+        const duration = moment.duration(data?.routes[0].duration, 'seconds')
+        setHours(duration.hours())
+        setMinutes(duration.minutes())
+      })
+  }
+
   // ** Driver Details
   useEffect(() => {
     const data = { driver_id: user?.driverId }
@@ -130,10 +156,15 @@ const Home = () => {
     dispatch(
       getVehiclesPositionAction({
         base64encoded,
-        callback: res => setCarPos([parseFloat(res?.longitude), parseFloat(res?.latitude)])
+        callback: res => {
+          setCarPos([parseFloat(res?.longitude), parseFloat(res?.latitude)])
+          getMapData([parseFloat(res?.longitude), parseFloat(res?.latitude)], pickUpCoordinates)
+        }
       })
     )
   }, [])
+
+  console.log('mapData : ', mapData)
 
   useEffect(() => {
     if (carPos) {
@@ -233,8 +264,8 @@ const Home = () => {
         <p>Phone : {driverDetails?.data && `${driverDetails?.data[0]?.mobileno}`}</p>
         <p>Pickup : {pickupLocation}</p>
         <p>Dropoff : {dropOffLocation}</p>
-        <p>Duration : {duration}</p>
-        <p>Distance : {`${distance} kms`}</p>
+        <p>Duration : {hours > 0 ? `${hours} Hours ${minutes} minutes` : `${minutes} minutes`}</p>
+        <p>Distance : {`${(mapData?.routes[0].distance / 1000).toFixed(1)} kms`}</p>
         <p>Cost : ${cost}</p>
       </div>
 
