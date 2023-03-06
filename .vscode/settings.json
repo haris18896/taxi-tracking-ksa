@@ -33,8 +33,10 @@
   "npm.packageManager": "yarn",
   // Extension: cSpell
   "cSpell.words": [
+    "anowan",
     "Customizer",
     "dropoff",
+    "Ijoia",
     "isadmin",
     "lastname",
     "mapbox",
