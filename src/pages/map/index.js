@@ -47,23 +47,37 @@ const Home = () => {
   const dropoffCoordinates = dropoff && [dropoff.split(',')[0], pickup.split(',')[1]]
 
   // ** Marker Function
-  const addToMap = (map, coordinates, popupContent) => {
-    const marker = new mapboxgl.Marker().setLngLat(coordinates).addTo(map)
+  const addToMap = (map, coordinates, popupContent, isCar = false) => {
+    if (isCar) {
+      const markerElement = document.createElement('div')
+      markerElement.className = isCar && 'car-marker'
+      const imgElement = document.createElement('img')
+      imgElement.src = '/images/car-icon.png' // replace with your car image URL
+      markerElement.appendChild(imgElement)
 
-    const popup = new mapboxgl.Popup({
-      closeButton: false,
-      offset: [0, -10]
+      const marker = new mapboxgl.Marker({
+        element: markerElement
+      })
+        .setLngLat(coordinates)
+        .addTo(map)
+    } else {
+      const marker = new mapboxgl.Marker().setLngLat(coordinates).addTo(map)
 
-      // className: 'marker-tooltip'
-    }).setHTML(popupContent)
+      const popup = new mapboxgl.Popup({
+        closeButton: false,
+        offset: [0, -10]
 
-    marker.getElement().addEventListener('mouseenter', () => {
-      popup.setLngLat(coordinates).addTo(map)
-    })
+        // className: 'marker-tooltip'
+      }).setHTML(popupContent)
 
-    marker.getElement().addEventListener('mouseleave', () => {
-      popup.remove()
-    })
+      marker.getElement().addEventListener('mouseenter', () => {
+        popup.setLngLat(coordinates).addTo(map)
+      })
+
+      marker.getElement().addEventListener('mouseleave', () => {
+        popup.remove()
+      })
+    }
   }
 
   // ** Route function
@@ -142,9 +156,28 @@ const Home = () => {
         }
 
         if (pickUpCoordinates && carPos) {
-          // map.fitBounds([carPos, pickUpCoordinates], {
-          //   padding: 60
-          // })
+          map.fitBounds([carPos, pickUpCoordinates], {
+            padding: 60
+          })
+
+          getRoute(carPos, pickUpCoordinates).then(route => {
+            map.addLayer({
+              id: 'route',
+              type: 'line',
+              source: {
+                type: 'geojson',
+                data: {
+                  type: 'Feature',
+                  geometry: route
+                }
+              },
+              paint: {
+                'line-color': '#3887be',
+                'line-width': 5,
+                'line-opacity': 0.75
+              }
+            })
+          })
         }
 
         // if (pickUpCoordinates && dropoffCoordinates) {
