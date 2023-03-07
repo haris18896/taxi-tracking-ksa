@@ -71,7 +71,7 @@ const UserDropdown = props => {
     }
   }
 
-  const handleLogout = () => {
+  const handleLogoutFunction = () => {
     dispatch(handleLogout())
     router.push('/login')
     handleDropdownClose()
@@ -165,7 +165,7 @@ const UserDropdown = props => {
          */}
         <Divider />
         <MenuItem
-          onClick={handleLogout}
+          onClick={() => handleLogoutFunction()}
           sx={{ py: 2, '& svg': { mr: 2, fontSize: '1.375rem', color: 'text.primary' } }}
         >
           <Icon icon='mdi:logout-variant' />
