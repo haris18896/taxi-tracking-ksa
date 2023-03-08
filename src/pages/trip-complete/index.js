@@ -2,12 +2,15 @@ import React from 'react'
 
 // ** MUI
 import { Box } from '@mui/system'
-import { Checkbox, FormControlLabel, Grid, Typography } from '@mui/material'
+import { Button, Checkbox, FormControlLabel, Grid, Typography } from '@mui/material'
 
 // ** Components
 import { FieldWrapper, TextLabel, TextInput, FieldHorizontalWrapper } from 'src/styles/input'
+import { useRouter } from 'next/router'
 
 function TripComplete() {
+  const router = useRouter()
+
   return (
     <>
       <Box sx={{ backgroundColor: '#3a3c54', height: '300px' }}>
@@ -92,6 +95,17 @@ function TripComplete() {
           </FieldHorizontalWrapper>
         </Grid>
       </Grid>
+
+      <Button
+        sx={{ mt: 4 }}
+        variant='contained'
+        color='warning'
+        onClick={() => {
+          router.push('/trip-view')
+        }}
+      >
+        Complete
+      </Button>
     </>
   )
 }
