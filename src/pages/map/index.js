@@ -43,9 +43,8 @@ const Home = () => {
   const [mapData, setMapData] = useState(null)
   const [hours, setHours] = useState(null)
   const [minutes, setMinutes] = useState(null)
+  const [tripStart, setTripStart] = useState(false)
   const [intervalId, setIntervalId] = useState(null)
-
-  console.log('carPos : ', carPos)
 
   const pickUpCoordinates = pickup && [pickup.split(',')[0], pickup.split(',')[1]]
   const dropoffCoordinates = dropoff && [dropoff.split(',')[0], pickup.split(',')[1]]
@@ -157,14 +156,25 @@ const Home = () => {
       getVehiclesPositionAction({
         base64encoded,
         callback: res => {
-          setCarPos([parseFloat(res?.longitude), parseFloat(res?.latitude)])
-          getMapData([parseFloat(res?.longitude), parseFloat(res?.latitude)], pickUpCoordinates)
+          // setCarPos([parseFloat(res?.longitude), parseFloat(res?.latitude)])
+          // getMapData([parseFloat(res?.longitude), parseFloat(res?.latitude)], pickUpCoordinates)
+
+          if (!tripStart) {
+            setCarPos([74.3159979, 31.4961879]) // near pickup
+            getMapData([74.3159979, 31.4961879], pickUpCoordinates) // near pickup to pickup
+          }
+
+          if (tripStart) {
+            setCarPos([74.3182677253, 31.4972652933]) // near dropoff
+            getMapData([74.3182677253, 31.4972652933], pickUpCoordinates) // near dropoff
+          }
         }
       })
     )
-  }, [])
+  }, [tripStart])
 
-  console.log('mapData : ', mapData)
+  console.log('tripStart: ', tripStart, 'mapData : ', mapData)
+  console.log('car Position : ', carPos)
 
   useEffect(() => {
     if (carPos) {
@@ -178,20 +188,45 @@ const Home = () => {
       map.on('load', () => {
         addToMap(map, carPos, '<p>Car Position</p>', true)
 
-        if (pickUpCoordinates) {
+        if (pickUpCoordinates && !tripStart) {
           addToMap(map, pickUpCoordinates, `<span>Pick-up point</span>`)
         }
 
-        if (dropoffCoordinates) {
+        if (dropoffCoordinates && tripStart) {
           addToMap(map, dropoffCoordinates, `<span>Drop-off point</span>`)
         }
 
-        if (pickUpCoordinates && carPos) {
+        if (pickUpCoordinates && carPos && !tripStart) {
           map.fitBounds([carPos, pickUpCoordinates], {
             padding: 60
           })
 
           getRoute(carPos, pickUpCoordinates).then(route => {
+            map.addLayer({
+              id: 'route',
+              type: 'line',
+              source: {
+                type: 'geojson',
+                data: {
+                  type: 'Feature',
+                  geometry: route
+                }
+              },
+              paint: {
+                'line-color': '#3887be',
+                'line-width': 5,
+                'line-opacity': 0.75
+              }
+            })
+          })
+        }
+
+        if (dropoffCoordinates && carPos && tripStart) {
+          map.fitBounds([carPos, dropoffCoordinates], {
+            padding: 60
+          })
+
+          getRoute(carPos, dropoffCoordinates).then(route => {
             map.addLayer({
               id: 'route',
               type: 'line',
@@ -242,7 +277,7 @@ const Home = () => {
         // }
       })
     }
-  }, [pickUpCoordinates, dropoffCoordinates, carPos])
+  }, [pickUpCoordinates, dropoffCoordinates, tripStart])
 
   // useEffect(() => {
   //   return () => {
@@ -265,19 +300,42 @@ const Home = () => {
         <p>Pickup : {pickupLocation}</p>
         <p>Dropoff : {dropOffLocation}</p>
         <p>Duration : {hours > 0 ? `${hours} Hours ${minutes} minutes` : `${minutes} minutes`}</p>
-        <p>Distance : {`${(mapData?.routes[0].distance / 1000).toFixed(1)} kms`}</p>
+        <p>
+          Distance :{' '}
+          {mapData?.routes[0].distance > 1000
+            ? `${(mapData?.routes[0].distance / 1000).toFixed(1)} kms`
+            : `${(mapData?.routes[0].distance).toFixed(2)} m`}
+        </p>
         <p>Cost : ${cost}</p>
       </div>
+      {!tripStart && (
+        <Button
+          className='start-trip-button'
+          variant='contained'
+          color='info'
+          disabled={mapData?.routes[0].distance > 100}
+          onClick={() => {
+            setCarPos([74.3182677253, 31.4972652933]) // near dropoff
+            setTripStart(true)
+          }}
+        >
+          Start Trip
+        </Button>
+      )}
 
-      <Button
-        className='start-trip-button'
-        variant='contained'
-        color='info'
-        disabled
-        onClick={() => console.log('get route from car location to end point')}
-      >
-        Start Trip
-      </Button>
+      {tripStart && (
+        <Button
+          className='start-trip-button'
+          variant='contained'
+          color='success'
+          disabled={mapData?.routes[0].distance > 400}
+          onClick={() => {
+            // setCarPos([74.3182677959, 31.4972659939])
+          }}
+        >
+          Complete
+        </Button>
+      )}
 
       <div ref={mapContainer} className='map-container'>
         {driversDetailsPending ? <FallbackSpinner /> : null}
