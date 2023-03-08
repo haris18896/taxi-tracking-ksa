@@ -330,7 +330,7 @@ const Home = () => {
           color='success'
           disabled={mapData?.routes[0].distance > 400}
           onClick={() => {
-            // setCarPos([74.3182677959, 31.4972659939])
+            router.push('/trip-complete')
           }}
         >
           Complete
