@@ -4,6 +4,7 @@ import React from 'react'
 import { useDispatch } from 'react-redux'
 import FallbackSpinner from 'src/@core/components/spinner'
 import { getVehicleTripsAction } from 'src/store/vehicles/vehiclesAction'
+import { VehicleCheckbox } from 'src/styles/pages/trip-view'
 
 function VehiclesList({ loading, data, onChangeHandler, vehicle }) {
   const dispatch = useDispatch()
@@ -22,7 +23,7 @@ function VehiclesList({ loading, data, onChangeHandler, vehicle }) {
           }}
         >
           {data.map((item, index) => (
-            <Box key={index} sx={{ width: '25%' }}>
+            <VehicleCheckbox key={index}>
               <FormControlLabel
                 control={
                   <Checkbox
@@ -41,7 +42,7 @@ function VehiclesList({ loading, data, onChangeHandler, vehicle }) {
                 }
                 label={item.vehicleName}
               />
-            </Box>
+            </VehicleCheckbox>
           ))}
           <Button
             color='info'
